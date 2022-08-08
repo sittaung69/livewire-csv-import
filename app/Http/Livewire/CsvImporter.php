@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Helpers\ChunkIterator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use League\Csv\Reader;
@@ -82,6 +83,9 @@ class CsvImporter extends Component
     public function import()
     {
         $this->validate();
+
+        $chunks = (new ChunkIterator($this->csvRecords->getRecords(), 10))
+            ->get();
 
         $this->createImport();
     }
