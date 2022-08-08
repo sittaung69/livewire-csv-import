@@ -38,11 +38,13 @@ class ImportCsv implements ShouldQueue
      */
     public function handle()
     {   
-        $this->model::upsert(
+        $affectedRows = $this->model::upsert(
             $this->chunk,
             ['id'],
             collect($this->columns)->diff('id')->keys()->toArray()
         );
+
+        $this->import->increment('processed_rows', $affectedRows);
 
         sleep(1);
     }
