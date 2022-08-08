@@ -22,6 +22,8 @@ class CsvImporter extends Component
 
     public array $fileHeaders = [];
 
+    public int $fileRowCount = 0;
+
     public array $columnsToMap = [];
 
     public array $requiredColumns = [];
@@ -70,6 +72,10 @@ class CsvImporter extends Component
         $csv = $this->readCsv;
 
         $this->fileHeaders = $csv->getHeader();
+
+        $this->fileRowCount = count($this->csvRecords);
+
+        $this->resetValidation();
     }
 
     public function getReadCsvProperty(): Reader
