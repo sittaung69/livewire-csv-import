@@ -84,7 +84,7 @@
                                                             {{ $columnLabels[$column] ?? $column }}*
                                                         </label>
                                                         <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                                            <select wire:model="columnsToMap.{{ $column }}" type="text" name="{{ $column }}" id="{{ $column }}" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
+                                                            <select wire:model.defer="columnsToMap.{{ $column }}" type="text" name="{{ $column }}" id="{{ $column }}" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
                                                                 <option value="">Don't import</option>
                                                                 @foreach ($fileHeaders as $fileHeader)
                                                                     <option value="{{ $fileHeader }}">{{ $fileHeader }}</option>
