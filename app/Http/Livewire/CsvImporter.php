@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use League\Csv\Reader;
+use League\Csv\Statement;
 
 class CsvImporter extends Component
 {
@@ -63,9 +64,19 @@ class CsvImporter extends Component
     {
         $this->validateOnly('file');
 
-        $csv = $this->readCsv($this->file->getRealPath());
+        $csv = $this->readCsv;
 
         $this->fileHeaders = $csv->getHeader();
+    }
+
+    public function getReadCsvProperty(): Reader
+    {
+        return $this->readCsv($this->file->getRealPath());
+    }
+
+    public function getCsvRecordsProperty()
+    {
+        return Statement::create()->process($this->readCsv);
     }
 
     public function import()
@@ -80,7 +91,7 @@ class CsvImporter extends Component
         return auth()->user()->imports()->create([
             'file_path' => $this->file->getRealPath(),
             'file_name' => $this->file->getClientOriginalName(),
-            'total_rows' => 0,
+            'total_rows' => count($this->csvRecords),
             'model' => $this->model,
         ]);
     }
