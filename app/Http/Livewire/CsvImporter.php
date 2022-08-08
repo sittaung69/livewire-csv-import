@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use League\Csv\Reader;
 
 class CsvImporter extends Component
 {
@@ -14,6 +15,8 @@ class CsvImporter extends Component
     public $file;
 
     public string $model;
+
+    public array $fileHeaders = [];
 
     protected $listeners = [
         'toggle'
@@ -29,7 +32,20 @@ class CsvImporter extends Component
     public function updatedFile()
     {
         $this->validateOnly('file');
+
+        $csv = $this->readCsv($this->file->getRealPath());
+
+        $this->fileHeaders = $csv->getHeader();
     }
+
+    protected function readCsv(string $path): Reader
+    {
+        $stream = fopen($path, 'r');
+        $csv = Reader::createFromStream($stream);
+        $csv->setHeaderOffset(0);
+
+        return $csv;
+    } 
 
     public function toggle()
     {

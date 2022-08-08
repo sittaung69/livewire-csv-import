@@ -74,6 +74,8 @@
 
                                     <!-- Column selection -->
                                     {{-- If file uloaded --}}
+                                        @json($fileHeaders)
+                                        
                                         <div class="mt-8">
                                             <h2 class="font-medium">Match columns</h2>
 
