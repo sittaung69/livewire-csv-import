@@ -20,6 +20,8 @@ class CsvImporter extends Component
 
     public array $columnsToMap = [];
 
+    public array $requiredColumns = [];
+
     protected $listeners = [
         'toggle'
     ];
@@ -35,9 +37,15 @@ class CsvImporter extends Component
 
     public function rules()
     {
-        return [
-            'file' => ['required', 'mimes:csv', 'max:51200'],
-        ];
+        $columnRules = collect($this->requiredColumns)
+            ->mapWithKeys(function ($column) {
+                return ['columnsToMap.' . $column => ['required']];
+            })
+            ->toArray();
+        
+        return array_merge($columnRules, [
+            'file' => ['required', 'mimes:csv', 'max:51200']
+        ]);
     }
 
     public function updatedFile()
@@ -47,6 +55,13 @@ class CsvImporter extends Component
         $csv = $this->readCsv($this->file->getRealPath());
 
         $this->fileHeaders = $csv->getHeader();
+    }
+
+    public function import()
+    {
+        $this->validate();
+
+        dd('import');
     }
 
     protected function readCsv(string $path): Reader
